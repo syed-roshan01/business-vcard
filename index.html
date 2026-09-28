@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Famous Foods | Making Life Easier in Kitchen</title>
+  <meta name="description" content="Famous Foods — premium tea, sauces, ready-to-cook masalas and convenient food products." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --orange:#f47a20;
+      --orange2:#ff9e2c;
+      --red:#a91818;
+      --green:#176b38;
+      --cream:#fff9ef;
+      --ink:#182018;
+      --muted:#6d716d;
+      --card:#fff;
+      --shadow:0 18px 55px rgba(56,32,10,.12);
+      --radius:24px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:"DM Sans",sans-serif;color:var(--ink);background:var(--cream)}
+    body.locked{overflow:hidden}
+    a{text-decoration:none;color:inherit}
+    img{display:block;max-width:100%}
+
+    /* ACCESS GATE */
+    .gate{
+      position:fixed;inset:0;z-index:1000;display:grid;place-items:center;
+      background:rgba(19,22,18,.74);backdrop-filter:blur(10px);padding:20px;
+    }
+    .gate-card{
+      width:min(470px,100%);background:#fff;border-radius:30px;padding:34px;
+      box-shadow:0 30px 90px rgba(0,0,0,.30);position:relative;overflow:hidden;
+    }
+    .gate-card:before{
+      content:"";position:absolute;inset:0 0 auto;height:7px;
+      background:linear-gradient(90deg,var(--red),var(--orange),#f2cf37,var(--green));
+    }
+    .brand-mark{
+      width:92px;height:92px;border-radius:50%;margin:4px auto 18px;
+      background:linear-gradient(145deg,#fff,#f7ead1);display:grid;place-items:center;
+      border:5px solid #fff;box-shadow:0 8px 25px rgba(0,0,0,.12);overflow:hidden;
+    }
+    .brand-mark span{font-family:"Playfair Display";font-size:16px;font-weight:800;color:var(--red);text-align:center;line-height:1.05}
+    .gate h1{text-align:center;font-family:"Playfair Display";font-size:29px;margin:0 0 8px}
+    .gate p{text-align:center;color:var(--muted);margin:0 auto 24px;line-height:1.6;font-size:14px}
+    .field{margin:12px 0}
+    .field label{display:block;font-size:12px;font-weight:700;margin:0 0 7px;color:#3c433c}
+    .field input{
+      width:100%;padding:15px 16px;border:1.5px solid #ddd7cb;border-radius:14px;
+      outline:none;font:inherit;background:#fff;
+    }
+    .field input:focus{border-color:var(--orange);box-shadow:0 0 0 4px rgba(244,122,32,.12)}
+    .gate-btn{
+      width:100%;border:0;border-radius:15px;padding:15px;margin-top:8px;
+      background:linear-gradient(135deg,var(--green),#25944f);color:#fff;
+      font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 12px 25px rgba(23,107,56,.2);
+    }
+    .gate-btn:disabled{opacity:.6;cursor:wait}
+    .consent{font-size:11px!important;color:#888!important;margin:12px 0 0!important}
+    .error{display:none;color:#b00020;font-size:12px;margin:7px 0 0}
+
+    /* SITE */
+    .site{display:none}
+    .site.visible{display:block}
+    .topbar{background:#152017;color:#fff;padding:9px 5%;font-size:12px;display:flex;justify-content:space-between;gap:15px}
+    .topbar span:last-child{color:#f6c85e}
+    header{
+      position:sticky;top:0;z-index:50;background:rgba(255,250,240,.93);backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(80,55,20,.08);
+    }
+    .nav{max-width:1180px;margin:auto;padding:15px 22px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .nav-brand{display:flex;align-items:center;gap:10px;font-weight:800}
+    .mini-logo{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff;border:2px solid #e7c88c;color:var(--red);font-family:"Playfair Display";font-size:10px;text-align:center;line-height:.95}
+    .nav-brand strong{font-family:"Playfair Display";font-size:21px;color:var(--red)}
+    nav{display:flex;gap:26px;font-weight:700;font-size:14px}
+    nav a:hover{color:var(--orange)}
+    .nav-cta{background:var(--green);color:#fff;padding:11px 17px;border-radius:12px;font-weight:800}
+
+    .hero{
+      min-height:650px;display:grid;place-items:center;position:relative;overflow:hidden;
+      background:
+        radial-gradient(circle at 15% 20%,rgba(255,202,80,.45),transparent 28%),
+        radial-gradient(circle at 85% 15%,rgba(239,91,34,.35),transparent 25%),
+        linear-gradient(135deg,#fff1d1 0%,#ffd48d 42%,#ff9a36 100%);
+    }
+    .hero:before,.hero:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.25}
+    .hero:before{width:430px;height:430px;background:#fff;right:-160px;top:-130px}
+    .hero:after{width:350px;height:350px;background:#f5cf5a;left:-160px;bottom:-150px}
+    .hero-inner{max-width:1180px;width:100%;padding:75px 22px;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:55px;position:relative;z-index:2}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.68);border:1px solid rgba(255,255,255,.9);padding:8px 13px;border-radius:999px;font-weight:800;font-size:12px;color:var(--green)}
+    .hero h2{font-family:"Playfair Display";font-size:clamp(48px,6vw,78px);line-height:.98;margin:18px 0 20px;color:#49120d;letter-spacing:-2px}
+    .hero h2 span{color:var(--green)}
+    .hero p{font-size:18px;line-height:1.7;max-width:590px;color:#4e4336}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+    .btn{padding:14px 21px;border-radius:13px;font-weight:800;display:inline-flex;align-items:center;gap:8px}
+    .btn-primary{background:var(--red);color:#fff;box-shadow:0 12px 24px rgba(169,24,24,.2)}
+    .btn-secondary{background:#fff;color:#26442d;border:1px solid #eadfcf}
+    .hero-art{min-height:420px;display:grid;place-items:center}
+    .product-orbit{width:min(430px,90vw);height:430px;border-radius:50%;background:rgba(255,255,255,.30);border:1px solid rgba(255,255,255,.55);position:relative;box-shadow:inset 0 0 80px rgba(255,255,255,.35)}
+    .float-card{position:absolute;background:#fff;border-radius:20px;padding:12px;box-shadow:var(--shadow);width:180px}
+    .float-card.one{left:-10px;top:60px;transform:rotate(-7deg)}
+    .float-card.two{right:-5px;bottom:58px;transform:rotate(7deg)}
+    .float-card .fake-pack{height:130px;border-radius:14px;display:grid;place-items:center;font-family:"Playfair Display";font-weight:800;text-align:center;padding:10px}
+    .tea{background:linear-gradient(145deg,#dceafa,#fff0aa);color:#0c2d62}
+    .sauce{background:linear-gradient(145deg,#f8d9bd,#c52c1d);color:#fff}
+    .center-badge{position:absolute;inset:0;display:grid;place-items:center}
+    .center-badge div{width:170px;height:170px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center;box-shadow:var(--shadow);border:7px solid #f4d173}
+    .center-badge strong{font-family:"Playfair Display";font-size:26px;color:var(--red)}
+    .center-badge small{display:block;color:var(--green);font-weight:800}
+
+    section{padding:90px 22px}
+    .container{max-width:1180px;margin:auto}
+    .section-head{text-align:center;max-width:700px;margin:0 auto 45px}
+    .section-kicker{font-size:12px;text-transform:uppercase;letter-spacing:2px;font-weight:800;color:var(--orange)}
+    h3{font-family:"Playfair Display";font-size:clamp(34px,4vw,48px);margin:10px 0 12px;color:#2c251f}
+    .section-head p{color:var(--muted);line-height:1.7}
+
+    .about{background:#fff}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .about-copy p{line-height:1.85;color:#5c605a}
+    .feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:25px}
+    .feature{padding:18px;border:1px solid #eee5d7;border-radius:17px;background:#fffaf3}
+    .feature b{display:block;margin-bottom:5px;color:var(--green)}
+    .feature span{font-size:13px;color:#73756f;line-height:1.5}
+    .about-card{background:linear-gradient(145deg,#fff1d5,#f9c55c);border-radius:30px;padding:38px;min-height:390px;position:relative;overflow:hidden}
+    .about-card:before{content:"";position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.35);right:-100px;top:-80px}
+    .about-card h4{font-family:"Playfair Display";font-size:42px;margin:0;color:#58140f}
+    .about-card p{position:relative;max-width:400px;line-height:1.8;color:#58452e}
+
+    .social-strip{background:#193c25;color:#fff;padding:32px 22px}
+    .social-inner{max-width:900px;margin:auto;text-align:center}
+    .social-inner p{opacity:.75;margin:5px 0 18px}
+    .socials{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+    .social{padding:11px 18px;border:1px solid rgba(255,255,255,.2);border-radius:999px;background:rgba(255,255,255,.08);font-weight:700}
+
+    .products{background:#fff9ef}
+    .products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .product-card{background:#fff;border:1px solid #eee3d2;border-radius:24px;overflow:hidden;box-shadow:0 9px 30px rgba(73,40,10,.06);display:flex;flex-direction:column;transition:.25s}
+    .product-card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+    .product-image{height:300px;background:#f6f1e8;overflow:hidden}
+    .product-image img{width:100%;height:100%;object-fit:cover}
+    .product-body{padding:22px;display:flex;flex-direction:column;flex:1}
+    .tag{display:inline-block;width:max-content;background:#edf7ef;color:var(--green);font-size:11px;font-weight:800;padding:6px 9px;border-radius:999px}
+    .product-body h4{font-family:"Playfair Display";font-size:25px;margin:12px 0 7px}
+    .product-body p{font-size:14px;color:#70736d;line-height:1.6;min-height:67px;margin:0 0 16px}
+    .product-bottom{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .price{font-weight:900;font-size:20px;color:var(--red)}
+    .enquire{border:0;background:#25a653;color:#fff;padding:12px 15px;border-radius:12px;font-weight:800;cursor:pointer}
+    .enquire:hover{background:#188744}
+
+    .how{background:#fff}
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .step{border:1px solid #eee3d2;border-radius:20px;padding:25px;background:#fffdf9}
+    .step-num{width:42px;height:42px;border-radius:50%;background:#fff0d0;color:var(--red);display:grid;place-items:center;font-weight:900}
+    .step h4{margin:16px 0 8px;font-size:18px}
+    .step p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+
+    footer{background:#111912;color:#fff;padding:50px 22px 25px}
+    .footer-grid{max-width:1180px;margin:auto;display:grid;grid-template-columns:1.4fr .8fr .8fr;gap:35px}
+    footer h4{font-family:"Playfair Display";font-size:24px;margin:0 0 12px}
+    footer p,footer a{color:#b8c0b9;font-size:14px;line-height:1.7}
+    .footer-bottom{max-width:1180px;margin:35px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;color:#7f8b82;display:flex;justify-content:space-between;gap:15px}
+
+    /* PRODUCT ENQUIRY */
+    .enquiry-modal{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.65);display:none;place-items:center;padding:20px;backdrop-filter:blur(7px)}
+    .enquiry-modal.open{display:grid}
+    .modal-card{width:min(510px,100%);background:#fff;border-radius:26px;padding:28px;position:relative}
+    .close{position:absolute;right:18px;top:14px;border:0;background:#f3f3f3;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:20px}
+    .modal-card h3{font-size:31px;margin:0 35px 7px 0}
+    .selected-product{background:#fff8ea;border:1px solid #f2dfbd;padding:13px;border-radius:13px;font-size:13px;margin:16px 0}
+    .wa-btn{width:100%;border:0;background:#25a653;color:#fff;padding:15px;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer}
+
+    @media(max-width:900px){
+      nav{display:none}
+      .hero-inner,.about-grid{grid-template-columns:1fr}
+      .hero{min-height:auto}
+      .hero-art{min-height:360px}
+      .products-grid{grid-template-columns:1fr 1fr}
+      .footer-grid{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:620px){
+      .topbar{display:none}
+      .nav{padding:12px 16px}
+      .nav-cta{padding:9px 12px;font-size:12px}
+      .hero-inner{padding:65px 18px}
+      .hero h2{font-size:49px}
+      .product-orbit{height:330px;width:330px}
+      .float-card{width:135px}.float-card .fake-pack{height:100px}.center-badge div{width:130px;height:130px}.center-badge strong{font-size:20px}
+      section{padding:65px 18px}
+      .products-grid,.steps,.feature-grid,.footer-grid{grid-template-columns:1fr}
+      .product-image{height:330px}
+      .footer-bottom{flex-direction:column}
+    }
+  </style>
+</head>
+<body class="locked">
+
+  <!-- Visitor information gate -->
+  <div class="gate" id="gate">
+    <div class="gate-card">
+      <div class="brand-mark"><span>FAMOUS<br>FOODS</span></div>
+      <h1>Welcome to Famous Foods</h1>
+      <p>Enter your details to explore our products, offers and enquiry options.</p>
+
+      <form id="leadForm">
+        <div class="field">
+          <label for="name">NAME</label>
+          <input id="name" name="name" type="text" placeholder="Your name" autocomplete="name" required />
+        </div>
+        <div class="field">
+          <label for="phone">WHATSAPP NUMBER</label>
+          <input id="phone" name="phone" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit WhatsApp number" autocomplete="tel" required />
+          <div class="error" id="phoneError">Please enter a valid 10-digit Indian mobile number.</div>
+        </div>
+        <button class="gate-btn" id="gateBtn" type="submit">Continue to Website</button>
+        <p class="consent">By continuing, you agree that Famous Foods may record these details for enquiries and customer communication.</p>
+      </form>
+    </div>
+  </div>
+
+  <main class="site" id="site">
+    <div class="topbar">
+      <span>Premium • Convenient • Made for Every Kitchen</span>
+      <span>WhatsApp: +91 70919 82594</span>
+    </div>
+
+    <header>
+      <div class="nav">
+        <a class="nav-brand" href="#home">
+          <div class="mini-logo">FAMOUS<br>FOODS</div>
+          <strong>Famous Foods</strong>
+        </a>
+        <nav>
+          <a href="#about">About Us</a>
+          <a href="#products">Products</a>
+          <a href="#social">Social</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <a class="nav-cta" href="https://wa.me/917091982594?text=Hello%20Famous%20Foods%2C%20I%20would%20like%20to%20know%20more%20about%20your%20products." target="_blank">WhatsApp Us</a>
+      </div>
+    </header>
+
+    <section class="hero" id="home">
+      <div class="hero-inner">
+        <div>
+          <span class="eyebrow">✦ MAKING LIFE EASIER IN KITCHEN</span>
+          <h2>Good Food.<br><span>Less Effort.</span></h2>
+          <p>Discover convenient food products crafted to bring rich flavours, authentic taste and easy cooking into your everyday kitchen.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#products">Explore Products ↓</a>
+            <a class="btn btn-secondary" href="https://wa.me/917091982594?text=Hello%20Famous%20Foods%2C%20I%20want%20to%20enquire%20about%20your%20products." target="_blank">Chat on WhatsApp</a>
+          </div>
+        </div>
+        <div class="hero-art">
+          <div class="product-orbit">
+            <div class="float-card one"><div class="fake-pack tea">ROYALS<br><big>ROYAL TEA</big><br><small>100% PURE TEA</small></div></div>
+            <div class="float-card two"><div class="fake-pack sauce">ROYALS<br><big>SMOKEY<br>SCHEZWAN</big></div></div>
+            <div class="center-badge"><div><div><strong>FAMOUS<br>FOODS</strong><small>Authentic • Convenient</small></div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-copy">
+            <div class="section-kicker">About Famous Foods</div>
+            <h3>Tradition in taste.<br>Convenience in every pack.</h3>
+            <p>Famous Foods brings together carefully selected food products designed for modern kitchens. From everyday tea to sauces and ready-to-cook masalas, our focus is simple: make cooking easier without compromising on flavour.</p>
+            <p>Explore our range, choose what you love and send an enquiry directly to us on WhatsApp.</p>
+            <div class="feature-grid">
+              <div class="feature"><b>Premium Quality</b><span>Products selected with a focus on taste and quality.</span></div>
+              <div class="feature"><b>Easy Cooking</b><span>Convenient products for quicker everyday preparation.</span></div>
+              <div class="feature"><b>Rich Flavours</b><span>Classic and bold flavours for your favourite dishes.</span></div>
+              <div class="feature"><b>Direct Enquiry</b><span>Ask about products and orders directly on WhatsApp.</span></div>
+            </div>
+          </div>
+          <div class="about-card">
+            <h4>Making life easier in kitchen.</h4>
+            <p>Whether you are preparing a quick meal, enjoying your daily chai or adding a little extra flavour to your food, Famous Foods is here to make the process simpler.</p>
+            <a class="btn btn-primary" href="#products">View Our Products</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="social-strip" id="social">
+      <div class="social-inner">
+        <strong>Follow Famous Foods</strong>
+        <p>Stay connected for new products, offers and updates.</p>
+        <div class="socials">
+          <!-- Replace these # links with the client's actual social URLs -->
+          <a class="social" href="#" target="_blank">Instagram</a>
+          <a class="social" href="#" target="_blank">Facebook</a>
+          <a class="social" href="#" target="_blank">YouTube</a>
+          <a class="social" href="https://wa.me/917091982594" target="_blank">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="products" id="products">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">Our Products</div>
+          <h3>Made for your kitchen</h3>
+          <p>Browse our featured products and tap <b>Enquire Now</b>. Your selected product details will be automatically added to a WhatsApp message.</p>
+        </div>
+
+        <div class="products-grid">
+          <!-- Replace IMAGE_URL_1/2/3 with the client's Cloudinary URLs -->
+          <article class="product-card">
+            <div class="product-image"><img src="https://res.cloudinary.com/ndzwmogb/image/upload/f_auto,q_auto/zy1" alt="Royals Royal Tea 500g" /></div>
+            <div class="product-body">
+              <span class="tag">PREMIUM TEA</span>
+              <h4>Royals Royal Tea</h4>
+              <p>100% pure tea with a strong aroma, rich taste and refreshing character. 500g pack.</p>
+              <div class="product-bottom">
+                <span class="price">₹249</span>
+                <button class="enquire" data-product="Royals Royal Tea" data-details="500g | MRP ₹249 | 100% Pure Tea">Enquire Now</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-image"><img src="https://res.cloudinary.com/ndzwmogb/image/upload/v1790613795/zy2.jpg" alt="Royals Smokey Schezwan Sauce 500g" /></div>
+            <div class="product-body">
+              <span class="tag">SAUCE • CHUTNEY</span>
+              <h4>Smokey Schezwan</h4>
+              <p>Rich and smoky flavour for stir-fries, noodles, snacks and more. 500g pack.</p>
+              <div class="product-bottom">
+                <span class="price">₹199</span>
+                <button class="enquire" data-product="Royals Smokey Schezwan" data-details="500g | MRP ₹199 | Sauce / Chutney / Tadka">Enquire Now</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-image"><img src="https://res.cloudinary.com/ndzwmogb/image/upload/v1790613796/zy3.jpg" alt="Lakhani Ready to Cook Masala 50g" /></div>
+            <div class="product-body">
+              <span class="tag">READY TO COOK</span>
+              <h4>Lakhani Ready to Cook Masala</h4>
+              <p>Convenient masala packs for delicious meals with less preparation. 50g pack; multiple flavours available.</p>
+              <div class="product-bottom">
+                <span class="price">₹99</span>
+                <button class="enquire" data-product="Lakhani Ready to Cook Masala" data-details="50g | ₹99 per packet | Multiple flavours available">Enquire Now</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="how">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">Simple Enquiry</div>
+          <h3>Three steps to get started</h3>
+        </div>
+        <div class="steps">
+          <div class="step"><div class="step-num">01</div><h4>Choose a product</h4><p>Explore the products and find something you would like to know more about.</p></div>
+          <div class="step"><div class="step-num">02</div><h4>Tap Enquire Now</h4><p>The selected product and its details are automatically prepared for your enquiry.</p></div>
+          <div class="step"><div class="step-num">03</div><h4>Continue on WhatsApp</h4><p>Your enquiry opens directly in WhatsApp to Famous Foods at +91 70919 82594.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <footer id="contact">
+      <div class="footer-grid">
+        <div>
+          <h4>Famous Foods</h4>
+          <p>Making life easier in kitchen. Explore our products and connect with us for enquiries and orders.</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <p><a href="#about">About Us</a><br><a href="#products">Products</a><br><a href="#social">Social Media</a></p>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <p>WhatsApp: <a href="https://wa.me/917091982594" target="_blank">+91 70919 82594</a><br>For product enquiries & orders.</p>
+        </div>
+      </div>
+      <div class="footer-bottom"><span>© 2026 Famous Foods. All rights reserved.</span><span>Designed for a faster product enquiry experience.</span></div>
+    </footer>
+  </main>
+
+  <div class="enquiry-modal" id="enquiryModal">
+    <div class="modal-card">
+      <button class="close" id="closeModal" aria-label="Close">×</button>
+      <div class="section-kicker">Product Enquiry</div>
+      <h3>Send your enquiry on WhatsApp</h3>
+      <div class="selected-product" id="selectedProduct"></div>
+      <button class="wa-btn" id="whatsappBtn">Continue to WhatsApp →</button>
+    </div>
+  </div>
+
+  <script>
+    /*
+      ==========================
+      SUPABASE LEAD RECORDING
+      ==========================
+      1. Create a Supabase project.
+      2. Run schema.sql from this package.
+      3. Paste your Supabase URL + anon key below.
+      4. Keep RLS enabled and only allow INSERT for this public form.
+    */
+    const SUPABASE_URL = "https://lswytfwdwfabenddnwdx.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxzd3l0Zndkd2ZhYmVuZGRud2R4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDczMzAsImV4cCI6MjEwNjE4MzMzMH0.Ch28FJjUV93gdYr2qYFb62fa_7yajeGGH_2mZZVafqA";
+
+    const WHATSAPP_NUMBER = "917091982594";
+    const gate = document.getElementById("gate");
+    const site = document.getElementById("site");
+    const leadForm = document.getElementById("leadForm");
+    const gateBtn = document.getElementById("gateBtn");
+    const phone = document.getElementById("phone");
+    const phoneError = document.getElementById("phoneError");
+
+    function validPhone(value){
+      return /^[6-9]\d{9}$/.test(value.replace(/\D/g,""));
+    }
+
+    async function recordLead(name, phoneNumber){
+      // Supabase REST endpoint. If not configured, keep a local fallback for demo/testing.
+      if (SUPABASE_URL.includes("YOUR_") || SUPABASE_ANON_KEY.includes("YOUR_")){
+        const existing = JSON.parse(localStorage.getItem("famous_foods_leads") || "[]");
+        existing.push({name, phone: phoneNumber, created_at: new Date().toISOString()});
+        localStorage.setItem("famous_foods_leads", JSON.stringify(existing));
+        return;
+      }
+
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify({name, phone: phoneNumber})
+      });
+
+      if(!response.ok) throw new Error("Could not save lead");
+    }
+
+    leadForm.addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const phoneNumber = phone.value.replace(/\D/g,"");
+
+      if(!validPhone(phoneNumber)){
+        phoneError.style.display = "block";
+        phone.focus();
+        return;
+      }
+      phoneError.style.display = "none";
+      gateBtn.disabled = true;
+      gateBtn.textContent = "Saving details...";
+
+      try{
+        await recordLead(name, phoneNumber);
+        sessionStorage.setItem("famous_foods_unlocked","1");
+        sessionStorage.setItem("famous_foods_name",name);
+        gate.style.display = "none";
+        site.classList.add("visible");
+        document.body.classList.remove("locked");
+        window.scrollTo(0,0);
+      }catch(err){
+        console.error(err);
+        alert("We couldn't save your details right now. Please try again.");
+      }finally{
+        gateBtn.disabled = false;
+        gateBtn.textContent = "Continue to Website";
+      }
+    });
+
+    // Product enquiry modal
+    const enquiryModal = document.getElementById("enquiryModal");
+    const selectedProduct = document.getElementById("selectedProduct");
+    const whatsappBtn = document.getElementById("whatsappBtn");
+    let currentProduct = "";
+
+    document.querySelectorAll(".enquire").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const product = btn.dataset.product;
+        const details = btn.dataset.details;
+        currentProduct = product;
+        selectedProduct.innerHTML = `<strong>${product}</strong><br>${details}`;
+        enquiryModal.classList.add("open");
+      });
+    });
+
+    document.getElementById("closeModal").addEventListener("click", ()=>enquiryModal.classList.remove("open"));
+    enquiryModal.addEventListener("click",(e)=>{ if(e.target === enquiryModal) enquiryModal.classList.remove("open"); });
+
+    whatsappBtn.addEventListener("click", ()=>{
+      const visitorName = sessionStorage.getItem("famous_foods_name") || "Customer";
+      const text = `Hello Famous Foods!%0A%0AName: ${encodeURIComponent(visitorName)}%0AI would like to enquire about: ${encodeURIComponent(currentProduct)}%0A%0APlease share more details.`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
+    });
+
+    // Restore access during the same browser session
+    if(sessionStorage.getItem("famous_foods_unlocked") === "1"){
+      gate.style.display = "none";
+      site.classList.add("visible");
+      document.body.classList.remove("locked");
+    }
+  </script>
+</body>
+</html>
