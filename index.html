@@ -586,7 +586,7 @@
           "apikey": SUPABASE_ANON_KEY,
           "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
           "Content-Type": "application/json",
-          "Prefer": "return=minimal, resolution=ignore-duplicates"
+          "Prefer": "return=minimal"
         },
         body: JSON.stringify({name, phone: phoneNumber})
       });
@@ -618,7 +618,18 @@
             return;
           }
           nameError.style.display = "none";
-          await recordLead(name, phoneNumber);
+          try{
+            await recordLead(name, phoneNumber);
+          }catch(err){
+            // The number may already be registered from an earlier visit.
+            // If so, sign the customer in instead of showing an error.
+            const knownName = await lookupLead(phoneNumber);
+            if(!knownName) throw err;
+            sessionStorage.setItem("famous_foods_unlocked","1");
+            sessionStorage.setItem("famous_foods_name",knownName);
+            unlockSite();
+            return;
+          }
           sessionStorage.setItem("famous_foods_unlocked","1");
           sessionStorage.setItem("famous_foods_name",name);
           unlockSite();
