@@ -551,6 +551,16 @@
       window.scrollTo(0,0);
     }
 
+    // Remember the customer on this browser so the gate is never shown again.
+    function rememberCustomer(name, phoneNumber){
+      try{
+        localStorage.setItem("famous_foods_phone", phoneNumber);
+        localStorage.setItem("famous_foods_name", name);
+      }catch(err){ /* storage unavailable — ignore */ }
+      sessionStorage.setItem("famous_foods_unlocked","1");
+      sessionStorage.setItem("famous_foods_name",name);
+    }
+
     // Returning-visitor check: does Supabase already know this number?
     // Returns the stored name for known customers, or null for new visitors.
     async function lookupLead(phoneNumber){
@@ -625,20 +635,17 @@
             // If so, sign the customer in instead of showing an error.
             const knownName = await lookupLead(phoneNumber);
             if(!knownName) throw err;
-            sessionStorage.setItem("famous_foods_unlocked","1");
-            sessionStorage.setItem("famous_foods_name",knownName);
+            rememberCustomer(knownName, phoneNumber);
             unlockSite();
             return;
           }
-          sessionStorage.setItem("famous_foods_unlocked","1");
-          sessionStorage.setItem("famous_foods_name",name);
+          rememberCustomer(name, phoneNumber);
           unlockSite();
         }else{
           const knownName = await lookupLead(phoneNumber);
           if(knownName){
             // Returning customer: the number alone is enough, name is not asked again.
-            sessionStorage.setItem("famous_foods_unlocked","1");
-            sessionStorage.setItem("famous_foods_name",knownName);
+            rememberCustomer(knownName, phoneNumber);
             unlockSite();
           }else{
             // First visit: reveal the name field once.
@@ -683,8 +690,13 @@
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
     });
 
-    // Restore access during the same browser session
-    if(sessionStorage.getItem("famous_foods_unlocked") === "1"){
+    // Returning customer on this browser: skip the gate entirely — nothing is
+    // asked again. On a different browser/device, the number-only login applies.
+    const savedName = localStorage.getItem("famous_foods_name");
+    if(savedName){
+      sessionStorage.setItem("famous_foods_name", savedName);
+      unlockSite();
+    }else if(sessionStorage.getItem("famous_foods_unlocked") === "1"){
       unlockSite();
     }
   </script>

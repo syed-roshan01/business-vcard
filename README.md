@@ -4,9 +4,10 @@ Static marketing site with a visitor lead gate, product catalogue, WhatsApp
 enquiries, and a password-protected admin page to view captured leads.
 
 ## What is included
-- Visitor gate with returning-customer login: first visit asks name + WhatsApp
-  number (saved to Supabase); repeat visits need only the number — the name is
-  never asked again (requires the `lead_login` section of `schema.sql`).
+- Visitor gate with remembering: first visit asks name + WhatsApp number
+  (saved to Supabase). After that the customer's browser remembers them — the
+  gate never appears again on that device. On a new device, only the number is
+  needed (requires the `lead_login` section of `schema.sql`).
 - 11 product cards with local images (`images/`) — clicking anywhere on a card
   opens the enquiry modal for that product.
 - Product enquiries open WhatsApp to **+91 91526 72712** with the visitor's name
