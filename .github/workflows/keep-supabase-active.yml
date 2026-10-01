@@ -1,22 +1,31 @@
 name: Keep Supabase Active
 
 # Supabase free-tier projects pause after 7 days of inactivity.
-# This workflow pings the project's REST API twice a week (Mon + Thu, 06:00 UTC),
-# so the project always registers activity and never pauses.
-# You can also run it manually: repo → Actions → Keep Supabase Active → Run workflow.
+# This workflow pings the project's REST API twice a week (Mon + Thu)
+# so it always counts as active and never pauses.
 #
-# The anon key below is the PUBLIC key already used in index.html/admin.html —
+# The heartbeat commit keeps the REPO itself active too: GitHub auto-disables
+# scheduled workflows in repos with no activity for 60 days — the commit
+# resets that clock, so this schedule can never be switched off.
+# "[skip ci]" in the commit message stops Vercel from redeploying on it.
+#
+# The anon key below is the PUBLIC key already used in the website —
 # it is safe to expose and can only do what RLS allows.
 
 on:
   schedule:
-    - cron: "0 6 * * 1,4"
+    - cron: "17 6 * * 1,4" # Mon + Thu 06:17 UTC (off the hour = less delay)
   workflow_dispatch:
+
+permissions:
+  contents: write # allows the heartbeat commit
 
 jobs:
   ping-supabase:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Ping Supabase REST API
         env:
           SUPABASE_URL: https://lswytfwdwfabenddnwdx.supabase.co
@@ -31,3 +40,12 @@ jobs:
           if [ "$code" != "200" ]; then
             echo "::warning::Unexpected status $code — the request still counts as project activity."
           fi
+
+      - name: Heartbeat commit (keeps this schedule from being auto-disabled)
+        run: |
+          git config user.name "keepalive-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          date -u "+%Y-%m-%d %H:%M UTC" > .last-ping
+          git add .last-ping
+          git commit -m "chore: keep-alive heartbeat [skip ci]" || echo "No changes to commit"
+          git push
