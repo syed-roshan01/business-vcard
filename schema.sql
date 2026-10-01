@@ -34,3 +34,33 @@ on public.leads
 for select
 to authenticated
 using (true);
+
+-- ===== Returning-visitor gate login =====
+-- Lets the website gate recognise a known customer by phone number alone on
+-- repeat visits (name is never asked again). index.html calls lead_login(phone)
+-- and only asks for the name when the number is not in the database.
+-- Safe to re-run.
+
+-- 1. Keep one record per customer (removes duplicates from repeat visits,
+--    keeps the earliest record).
+delete from public.leads a
+using public.leads b
+where a.phone = b.phone
+  and a.id > b.id;
+
+-- 2. Enforce one record per number going forward (website inserts use
+--    "ignore duplicates", so repeat registrations never create junk rows).
+create unique index if not exists leads_phone_uniq on public.leads(phone);
+
+-- 3. Phone-only login check for the gate (returns the stored name, or null).
+--    Reveals nothing else — only works one number at a time.
+create or replace function public.lead_login(p_phone text)
+returns text
+language sql
+security definer
+set search_path = public
+as $$
+  select name from public.leads where phone = p_phone limit 1;
+$$;
+
+grant execute on function public.lead_login(text) to anon;

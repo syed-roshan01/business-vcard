@@ -206,19 +206,20 @@
     <div class="gate-card">
       <div class="brand-mark"><span>FAMOUS<br>FOODS</span></div>
       <h1>Welcome to Famous Foods</h1>
-      <p>Enter your details to explore our products, offers and enquiry options.</p>
+      <p id="gateSub">Enter your WhatsApp number to explore our products, offers and enquiry options.</p>
 
       <form id="leadForm">
-        <div class="field">
-          <label for="name">NAME</label>
-          <input id="name" name="name" type="text" placeholder="Your name" autocomplete="name" required />
-        </div>
         <div class="field">
           <label for="phone">WHATSAPP NUMBER</label>
           <input id="phone" name="phone" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit WhatsApp number" autocomplete="tel" required />
           <div class="error" id="phoneError">Please enter a valid 10-digit Indian mobile number.</div>
         </div>
-        <button class="gate-btn" id="gateBtn" type="submit">Continue to Website</button>
+        <div class="field" id="nameField" style="display:none">
+          <label for="name">NAME</label>
+          <input id="name" name="name" type="text" placeholder="Your name" autocomplete="name" />
+          <div class="error" id="nameError">Please enter your name.</div>
+        </div>
+        <button class="gate-btn" id="gateBtn" type="submit">Continue</button>
         <p class="consent">By continuing, you agree that Famous Foods may record these details for enquiries and customer communication.</p>
       </form>
     </div>
@@ -314,6 +315,7 @@
         </div>
 
         <div class="products-grid">
+          <!-- 1. GINGER GARLIC PASTE -->
           <article class="product-card">
             <div class="product-image"><img src="images/sarang.jpeg" alt="Sarang Ginger & Garlic Paste" loading="lazy" /></div>
             <div class="product-body">
@@ -327,6 +329,7 @@
             </div>
           </article>
 
+          <!-- 2. FRESH FRIED ONIONS -->
           <article class="product-card">
             <div class="product-image"><img src="images/onion.jpeg" alt="Famous Foods Fresh Fried Onion Barista" loading="lazy" /></div>
             <div class="product-body">
@@ -340,45 +343,7 @@
             </div>
           </article>
 
-          <article class="product-card">
-            <div class="product-image"><img src="images/golkeri-achar.jpeg" alt="Royals Gol Keri Achar" loading="lazy" /></div>
-            <div class="product-body">
-              <span class="tag">PICKLE • SWEET & TANGY</span>
-              <h4>Royals Gol Keri Achar</h4>
-              <p>A traditional sweet and tangy raw mango pickle made for authentic flavour in every bite. 500g pack.</p>
-              <div class="product-bottom">
-                <span class="price">₹249</span>
-                <button class="enquire" data-product="Royals Gol Keri Achar" data-details="500g | MRP ₹249 | Sweet & Tangy Pickle">Enquire Now</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="product-card">
-            <div class="product-image"><img src="images/munne-chacho.jpeg" alt="Munne Chacho Pudina Imli Chutni" loading="lazy" /></div>
-            <div class="product-body">
-              <span class="tag">CHUTNEY</span>
-              <h4>Munne Chacho Pudina Imli Chutni</h4>
-              <p>A refreshing mint and tamarind chutney with a delicious sweet-tangy flavour, perfect for snacks and meals.</p>
-              <div class="product-bottom">
-                <span class="price">Enquire for Price</span>
-                <button class="enquire" data-product="Munne Chacho Pudina Imli Chutni" data-details="Pudina Imli Chutni | Khatta Meetha flavour">Enquire Now</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="product-card">
-            <div class="product-image"><img src="images/smokey-schezwan.jpeg" alt="Royals Smokey Schezwan Sauce" loading="lazy" /></div>
-            <div class="product-body">
-              <span class="tag">SAUCE • CHUTNEY • TADKA</span>
-              <h4>Royals Smokey Schezwan</h4>
-              <p>Rich and smoky flavour for stir-fries, noodles, snacks and more. 500g pack.</p>
-              <div class="product-bottom">
-                <span class="price">₹199</span>
-                <button class="enquire" data-product="Royals Smokey Schezwan" data-details="500g | MRP ₹199 | Sauce / Chutney / Tadka">Enquire Now</button>
-              </div>
-            </div>
-          </article>
-
+          <!-- 3. DESI GHEE -->
           <article class="product-card">
             <div class="product-image"><img src="images/kerala-special-ghee.jpeg" alt="Kerala Special Cow's Ghee" loading="lazy" /></div>
             <div class="product-body">
@@ -392,58 +357,7 @@
             </div>
           </article>
 
-          <article class="product-card">
-            <div class="product-image"><img src="images/ready-to-cook-masala-chicken-angara.jpeg" alt="Lakhani Chicken Angara Ready to Cook Masala" loading="lazy" /></div>
-            <div class="product-body">
-              <span class="tag">READY TO COOK • NON-VEG</span>
-              <h4>Chicken Angara Masala</h4>
-              <p>Ready-to-cook masala for rich flavours and easy preparation. One 50g packet is enough to cook 1kg chicken or mutton.</p>
-              <div class="product-bottom">
-                <span class="price">₹99</span>
-                <button class="enquire" data-product="Lakhani Chicken Angara Ready to Cook Masala" data-details="50g | ₹99 per packet | Enough for 1kg chicken/mutton">Enquire Now</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="product-card">
-            <div class="product-image"><img src="images/ready-to-cook-masala-paneer-butter-masala.jpeg" alt="Lakhani Paneer Butter Masala Ready to Cook Masala" loading="lazy" /></div>
-            <div class="product-body">
-              <span class="tag">READY TO COOK • VEG</span>
-              <h4>Paneer Butter Masala</h4>
-              <p>Ready-to-cook masala for delicious paneer dishes. One 50g packet is enough to cook half a kilogram of vegetables.</p>
-              <div class="product-bottom">
-                <span class="price">₹99</span>
-                <button class="enquire" data-product="Lakhani Paneer Butter Masala Ready to Cook Masala" data-details="50g | ₹99 per packet | Enough for ½ kg vegetables">Enquire Now</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="product-card">
-            <div class="product-image"><img src="images/munne-chacho-imli-chatni.jpeg" alt="Munne Chacho Imli Chatni" loading="lazy" /></div>
-            <div class="product-body">
-              <span class="tag">IMLI CHATNI</span>
-              <h4>Munne Chacho Imli Chatni</h4>
-              <p>Khatta-meetha tamarind chutney made from finest imli, perfect as a delicious companion for every meal.</p>
-              <div class="product-bottom">
-                <span class="price">Enquire for Price</span>
-                <button class="enquire" data-product="Munne Chacho Imli Chatni" data-details="Imli Chatni | Khatta Meetha flavour | 100% Natural Goodness">Enquire Now</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="product-card">
-            <div class="product-image"><img src="images/instant-dessert-premix.jpeg" alt="Al-Nasr Instant Dessert Premix" loading="lazy" /></div>
-            <div class="product-body">
-              <span class="tag">INSTANT DESSERT PREMIX</span>
-              <h4>Instant Dessert Premix</h4>
-              <p>Traditional dessert flavours made easy with Al-Nasr Special Vanilla Phirni and Special Kheer premixes.</p>
-              <div class="product-bottom">
-                <span class="price">Enquire for Price</span>
-                <button class="enquire" data-product="Al-Nasr Instant Dessert Premix" data-details="Special Vanilla Phirni 180g | Special Kheer 160g | Quick & Easy">Enquire Now</button>
-              </div>
-            </div>
-          </article>
-
+          <!-- 4. ROYAL TEA -->
           <article class="product-card">
             <div class="product-image"><img src="images/royal-tea.jpeg" alt="Royals Royal Tea" loading="lazy" /></div>
             <div class="product-body">
@@ -453,6 +367,104 @@
               <div class="product-bottom">
                 <span class="price">₹249</span>
                 <button class="enquire" data-product="Royals Royal Tea" data-details="500g | MRP ₹249 | 100% Pure Tea">Enquire Now</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- 5. READY TO COOK MASALA - NON VEG -->
+          <article class="product-card">
+            <div class="product-image"><img src="images/ready-to-cook-masala-chicken-angara.jpeg" alt="Lakhani Ready to Cook Masala Non Veg" loading="lazy" /></div>
+            <div class="product-body">
+              <span class="tag">READY TO COOK MASALA</span>
+              <h4>Ready to Cook Masala – Non Veg</h4>
+              <p>Ready-to-cook masala for rich flavours and easy preparation. One packet enough to cook one kg chicken / mutton.</p>
+              <div class="product-bottom">
+                <span class="price">₹99</span>
+                <button class="enquire" data-product="Lakhani Ready to Cook Masala (Non Veg)" data-details="50g | ₹99 per packet | One packet enough to cook one kg chicken/mutton">Enquire Now</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- 6. READY TO COOK MASALA - VEG -->
+          <article class="product-card">
+            <div class="product-image"><img src="images/ready-to-cook-masala-paneer-butter-masala.jpeg" alt="Lakhani Ready to Cook Masala Veg" loading="lazy" /></div>
+            <div class="product-body">
+              <span class="tag">READY TO COOK MASALA</span>
+              <h4>Ready to Cook Masala – Veg</h4>
+              <p>Ready-to-cook masala for delicious veg dishes. One packet enough to cook half kg vegetables.</p>
+              <div class="product-bottom">
+                <span class="price">₹99</span>
+                <button class="enquire" data-product="Lakhani Ready to Cook Masala (Veg)" data-details="50g | ₹99 per packet | One packet enough to cook half kg vegetables">Enquire Now</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- 7. ROYAL SMOKEY SCHEZWAN CHUTNEY -->
+          <article class="product-card">
+            <div class="product-image"><img src="images/smokey-schezwan.jpeg" alt="Royals Smokey Schezwan Chutney" loading="lazy" /></div>
+            <div class="product-body">
+              <span class="tag">SAUCE • CHUTNEY • TADKA</span>
+              <h4>Royals Smokey Schezwan</h4>
+              <p>Rich and smoky flavour for stir-fries, noodles, snacks and more. 500g pack.</p>
+              <div class="product-bottom">
+                <span class="price">₹199</span>
+                <button class="enquire" data-product="Royals Smokey Schezwan" data-details="500g | MRP ₹199 | Sauce / Chutney / Tadka">Enquire Now</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- 8. ROYAL GOL KERI ACHAR -->
+          <article class="product-card">
+            <div class="product-image"><img src="images/golkeri-achar.jpeg" alt="Royals Gol Keri Achar" loading="lazy" /></div>
+            <div class="product-body">
+              <span class="tag">PICKLE • SWEET & TANGY</span>
+              <h4>Royals Gol Keri Achar</h4>
+              <p>A traditional sweet and tangy raw mango pickle made for authentic flavour in every bite. 500g pack.</p>
+              <div class="product-bottom">
+                <span class="price">₹249</span>
+                <button class="enquire" data-product="Royals Gol Keri Achar" data-details="500g | MRP ₹249 | Sweet & Tangy Pickle">Enquire Now</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- 9. MUNNE CHACHA IMLI CHATNI -->
+          <article class="product-card">
+            <div class="product-image"><img src="images/munne-chacho-imli-chatni.jpeg" alt="Munne Chacha Imli Chatni" loading="lazy" /></div>
+            <div class="product-body">
+              <span class="tag">IMLI CHATNI</span>
+              <h4>Munne Chacha Imli Chatni</h4>
+              <p>Khatta-meetha tamarind chutney made from finest imli, perfect as a delicious companion for every meal.</p>
+              <div class="product-bottom">
+                <span class="price">Enquire for Price</span>
+                <button class="enquire" data-product="Munne Chacha Imli Chatni" data-details="Imli Chatni | Khatta Meetha flavour | 100% Natural Goodness">Enquire Now</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- 10. MUNNE CHACHA PHUDINA IMLI CHATNI -->
+          <article class="product-card">
+            <div class="product-image"><img src="images/munne-chacho.jpeg" alt="Munne Chacha Phudina Imli Chatni" loading="lazy" /></div>
+            <div class="product-body">
+              <span class="tag">PHUDINA IMLI CHATNI</span>
+              <h4>Munne Chacha Phudina Imli Chatni</h4>
+              <p>A refreshing mint and tamarind chutney with a delicious sweet-tangy flavour, perfect for snacks and meals.</p>
+              <div class="product-bottom">
+                <span class="price">Enquire for Price</span>
+                <button class="enquire" data-product="Munne Chacha Phudina Imli Chatni" data-details="Phudina Imli Chatni | Khatta Meetha flavour">Enquire Now</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- 11. DESSERT PREMIXES -->
+          <article class="product-card">
+            <div class="product-image"><img src="images/instant-dessert-premix.jpeg" alt="Al-Nasr Instant Dessert Premix" loading="lazy" /></div>
+            <div class="product-body">
+              <span class="tag">INSTANT DESSERT PREMIX</span>
+              <h4>Instant Dessert Premix</h4>
+              <p>Traditional dessert flavours made easy with Al-Nasr Special Vanilla Phirni and Special Kheer premixes.</p>
+              <div class="product-bottom">
+                <span class="price">Enquire for Price</span>
+                <button class="enquire" data-product="Al-Nasr Instant Dessert Premix" data-details="Special Vanilla Phirni 180g | Special Kheer 160g | Quick & Easy">Enquire Now</button>
               </div>
             </div>
           </article>
@@ -523,9 +535,40 @@
     const gateBtn = document.getElementById("gateBtn");
     const phone = document.getElementById("phone");
     const phoneError = document.getElementById("phoneError");
+    const nameField = document.getElementById("nameField");
+    const nameInput = document.getElementById("name");
+    const nameError = document.getElementById("nameError");
+    const gateSub = document.getElementById("gateSub");
 
     function validPhone(value){
       return /^[6-9]\d{9}$/.test(value.replace(/\D/g,""));
+    }
+
+    function unlockSite(){
+      gate.style.display = "none";
+      site.classList.add("visible");
+      document.body.classList.remove("locked");
+      window.scrollTo(0,0);
+    }
+
+    // Returning-visitor check: does Supabase already know this number?
+    // Returns the stored name for known customers, or null for new visitors.
+    async function lookupLead(phoneNumber){
+      try{
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/lead_login`, {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ p_phone: phoneNumber })
+        });
+        if(!res.ok) return null; // login function not set up yet -> treat as first visit
+        return await res.json();
+      }catch(err){
+        return null;
+      }
     }
 
     async function recordLead(name, phoneNumber){
@@ -543,7 +586,7 @@
           "apikey": SUPABASE_ANON_KEY,
           "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
           "Content-Type": "application/json",
-          "Prefer": "return=minimal"
+          "Prefer": "return=minimal, resolution=ignore-duplicates"
         },
         body: JSON.stringify({name, phone: phoneNumber})
       });
@@ -553,7 +596,6 @@
 
     leadForm.addEventListener("submit", async (e)=>{
       e.preventDefault();
-      const name = document.getElementById("name").value.trim();
       const phoneNumber = phone.value.replace(/\D/g,"");
 
       if(!validPhone(phoneNumber)){
@@ -562,23 +604,45 @@
         return;
       }
       phoneError.style.display = "none";
+
+      const firstVisit = nameField.style.display !== "none";
       gateBtn.disabled = true;
-      gateBtn.textContent = "Saving details...";
+      gateBtn.textContent = firstVisit ? "Saving details..." : "Checking your number...";
 
       try{
-        await recordLead(name, phoneNumber);
-        sessionStorage.setItem("famous_foods_unlocked","1");
-        sessionStorage.setItem("famous_foods_name",name);
-        gate.style.display = "none";
-        site.classList.add("visible");
-        document.body.classList.remove("locked");
-        window.scrollTo(0,0);
+        if(firstVisit){
+          const name = nameInput.value.trim();
+          if(!name){
+            nameError.style.display = "block";
+            nameInput.focus();
+            return;
+          }
+          nameError.style.display = "none";
+          await recordLead(name, phoneNumber);
+          sessionStorage.setItem("famous_foods_unlocked","1");
+          sessionStorage.setItem("famous_foods_name",name);
+          unlockSite();
+        }else{
+          const knownName = await lookupLead(phoneNumber);
+          if(knownName){
+            // Returning customer: the number alone is enough, name is not asked again.
+            sessionStorage.setItem("famous_foods_unlocked","1");
+            sessionStorage.setItem("famous_foods_name",knownName);
+            unlockSite();
+          }else{
+            // First visit: reveal the name field once.
+            nameField.style.display = "block";
+            nameInput.required = true;
+            gateSub.textContent = "Looks like your first visit — please share your name to continue.";
+            nameInput.focus();
+          }
+        }
       }catch(err){
         console.error(err);
         alert("We couldn't save your details right now. Please try again.");
       }finally{
         gateBtn.disabled = false;
-        gateBtn.textContent = "Continue to Website";
+        gateBtn.textContent = nameField.style.display !== "none" ? "Continue to Website" : "Continue";
       }
     });
 
@@ -610,9 +674,7 @@
 
     // Restore access during the same browser session
     if(sessionStorage.getItem("famous_foods_unlocked") === "1"){
-      gate.style.display = "none";
-      site.classList.add("visible");
-      document.body.classList.remove("locked");
+      unlockSite();
     }
   </script>
 </body>
