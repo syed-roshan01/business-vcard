@@ -9,6 +9,8 @@ create table if not exists public.leads (
 alter table public.leads enable row level security;
 
 -- Public website needs INSERT only.
+-- drop-if-exists keeps this whole file safe to re-run any time.
+drop policy if exists "Allow public lead inserts" on public.leads;
 create policy "Allow public lead inserts"
 on public.leads
 for insert
