@@ -18,5 +18,17 @@ with check (
   and phone ~ '^[6-9][0-9]{9}$'
 );
 
--- Do NOT create a public SELECT policy.
--- View/export leads from the Supabase dashboard using an authenticated admin account.
+-- Do NOT create a public (anon) SELECT policy — visitor leads stay private.
+-- Admins sign in via Supabase Auth and read them on admin.html (policy below).
+
+-- ===== Admin leads viewer (admin.html) =====
+-- Allows the signed-in admin account to read leads on the admin.html page.
+-- Create your admin login in Supabase: Authentication → Users → Add user
+-- (email + a strong password, keep "Auto Confirm User" enabled).
+-- This section is safe to run on its own if you already ran the schema above.
+drop policy if exists "Admins can view leads" on public.leads;
+create policy "Admins can view leads"
+on public.leads
+for select
+to authenticated
+using (true);

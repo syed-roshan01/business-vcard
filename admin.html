@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Famous Foods | Leads Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="Famous Foods leads dashboard — view and export captured enquiries." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --orange:#f47a20;
+      --red:#a91818;
+      --green:#176b38;
+      --cream:#fff9ef;
+      --ink:#182018;
+      --muted:#6d716d;
+      --shadow:0 18px 55px rgba(56,32,10,.12);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:"DM Sans",sans-serif;color:var(--ink);background:var(--cream);min-height:100vh}
+
+    /* LOGIN */
+    .login-wrap{min-height:100vh;display:grid;place-items:center;padding:20px;
+      background:
+        radial-gradient(circle at 15% 20%,rgba(255,202,80,.45),transparent 28%),
+        radial-gradient(circle at 85% 15%,rgba(239,91,34,.35),transparent 25%),
+        linear-gradient(135deg,#fff1d1 0%,#ffd48d 42%,#ff9a36 100%);
+    }
+    .login-card{width:min(440px,100%);background:#fff;border-radius:30px;padding:34px;
+      box-shadow:0 30px 90px rgba(0,0,0,.30);position:relative;overflow:hidden}
+    .login-card:before{content:"";position:absolute;inset:0 0 auto;height:7px;
+      background:linear-gradient(90deg,var(--red),var(--orange),#f2cf37,var(--green))}
+    .brand-mark{width:82px;height:82px;border-radius:50%;margin:4px auto 16px;
+      background:linear-gradient(145deg,#fff,#f7ead1);display:grid;place-items:center;
+      border:5px solid #fff;box-shadow:0 8px 25px rgba(0,0,0,.12)}
+    .brand-mark span{font-family:"Playfair Display";font-size:15px;font-weight:800;color:var(--red);text-align:center;line-height:1.05}
+    .login-card h1{text-align:center;font-family:"Playfair Display";font-size:27px;margin:0 0 8px}
+    .login-card .sub{text-align:center;color:var(--muted);margin:0 auto 22px;line-height:1.6;font-size:14px}
+    .field{margin:12px 0}
+    .field label{display:block;font-size:12px;font-weight:700;margin:0 0 7px;color:#3c433c}
+    .field input{width:100%;padding:14px 16px;border:1.5px solid #ddd7cb;border-radius:14px;
+      outline:none;font:inherit;background:#fff}
+    .field input:focus{border-color:var(--orange);box-shadow:0 0 0 4px rgba(244,122,32,.12)}
+    .login-btn{width:100%;border:0;border-radius:15px;padding:14px;margin-top:8px;
+      background:linear-gradient(135deg,var(--green),#25944f);color:#fff;
+      font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 12px 25px rgba(23,107,56,.2)}
+    .login-btn:disabled{opacity:.6;cursor:wait}
+    .login-error{display:none;background:#fdecec;color:#b00020;font-size:13px;
+      padding:11px 13px;border-radius:12px;margin:10px 0 0;line-height:1.5}
+    .hint{font-size:11px;color:#8a8d88;text-align:center;line-height:1.6;margin:16px 0 0}
+
+    /* DASHBOARD */
+    .dash{display:none;min-height:100vh}
+    .dash-head{position:sticky;top:0;z-index:20;background:rgba(255,250,240,.94);
+      backdrop-filter:blur(14px);border-bottom:1px solid rgba(80,55,20,.08)}
+    .dash-head-inner{max-width:1080px;margin:auto;padding:14px 22px;display:flex;
+      align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+    .dash-brand{display:flex;align-items:center;gap:11px}
+    .mini-logo{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+      background:#fff;border:2px solid #e7c88c;color:var(--red);
+      font-family:"Playfair Display";font-size:13px;font-weight:800}
+    .dash-brand strong{font-family:"Playfair Display";font-size:20px;color:var(--red);display:block;line-height:1.1}
+    .dash-brand small{color:var(--muted);font-size:12px}
+    .dash-actions{display:flex;gap:9px;flex-wrap:wrap}
+    .btn{border:0;border-radius:12px;padding:11px 15px;font-weight:800;font-size:13px;
+      cursor:pointer;font-family:inherit}
+    .btn.ghost{background:#fff;border:1px solid #eadfcf;color:#26442d}
+    .btn.green{background:#25a653;color:#fff}
+    .btn.green:hover{background:#188744}
+    .btn.red{background:#fff0f0;color:#b00020;border:1px solid #f2cfcf}
+    .dash-main{max-width:1080px;margin:auto;padding:28px 22px 60px}
+    .stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+    .stat{background:#fff;border:1px solid #eee3d2;border-radius:18px;padding:18px 20px;
+      box-shadow:0 9px 30px rgba(73,40,10,.05)}
+    .stat small{display:block;font-size:11px;font-weight:800;letter-spacing:1.5px;color:var(--orange)}
+    .stat strong{font-family:"Playfair Display";font-size:34px;display:block;margin-top:4px;color:#2c251f}
+    .table-card{background:#fff;border:1px solid #eee3d2;border-radius:22px;overflow:hidden;
+      box-shadow:0 9px 30px rgba(73,40,10,.05)}
+    .table-scroll{overflow-x:auto}
+    table{width:100%;border-collapse:collapse;font-size:14px;min-width:640px}
+    thead th{text-align:left;background:#152017;color:#fff;padding:13px 16px;font-size:11px;
+      letter-spacing:1.5px;text-transform:uppercase}
+    tbody td{padding:14px 16px;border-bottom:1px solid #f3ecdf;vertical-align:middle}
+    tbody tr:last-child td{border-bottom:0}
+    tbody tr:hover{background:#fffaf3}
+    td.idx{color:#a9a49b;font-weight:700;width:44px}
+    .lead-name{font-weight:700}
+    .wa{color:var(--green);font-weight:800;text-decoration:none}
+    .wa:hover{text-decoration:underline}
+    .when{color:var(--muted);font-size:13px;white-space:nowrap}
+    .loading-row td{color:var(--muted);text-align:center;padding:34px}
+    .empty{display:none;padding:44px 20px;text-align:center;color:var(--muted);line-height:1.7;font-size:14px}
+    .foot-note{margin-top:18px;font-size:12px;color:#8a8d88;text-align:center;line-height:1.6}
+
+    @media(max-width:620px){
+      .dash-head-inner{padding:12px 16px}
+      .dash-main{padding:20px 16px 50px}
+      .stats{grid-template-columns:1fr 1fr}
+      .stat strong{font-size:26px}
+      .dash-actions{width:100%}
+      .dash-actions .btn{flex:1}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Admin sign-in -->
+  <div class="login-wrap" id="loginWrap">
+    <div class="login-card">
+      <div class="brand-mark"><span>FAMOUS<br>FOODS</span></div>
+      <h1>Leads Admin</h1>
+      <p class="sub">Sign in with your admin account to view and export the leads captured from the website.</p>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">EMAIL</label>
+          <input id="email" type="email" placeholder="admin@example.com" autocomplete="username" required />
+        </div>
+        <div class="field">
+          <label for="password">PASSWORD</label>
+          <input id="password" type="password" placeholder="Your password" autocomplete="current-password" required />
+        </div>
+        <div class="login-error" id="loginError"></div>
+        <button class="login-btn" id="loginBtn" type="submit">Sign In</button>
+      </form>
+
+      <p class="hint">Admin accounts are created in Supabase → Authentication → Users.<br>Access is protected by Supabase Auth + Row Level Security.</p>
+    </div>
+  </div>
+
+  <!-- Leads dashboard -->
+  <div class="dash" id="dash">
+    <header class="dash-head">
+      <div class="dash-head-inner">
+        <div class="dash-brand">
+          <div class="mini-logo">FF</div>
+          <div>
+            <strong>Famous Foods — Leads</strong>
+            <small id="adminEmailLabel"></small>
+          </div>
+        </div>
+        <div class="dash-actions">
+          <button class="btn ghost" id="refreshBtn">↻ Refresh</button>
+          <button class="btn green" id="exportBtn">⬇ Export CSV</button>
+          <button class="btn red" id="logoutBtn">Log out</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="dash-main">
+      <div class="stats">
+        <div class="stat"><small>TOTAL LEADS</small><strong id="totalStat">—</strong></div>
+        <div class="stat"><small>TODAY</small><strong id="todayStat">—</strong></div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Name</th><th>WhatsApp Number</th><th>Received</th></tr>
+            </thead>
+            <tbody id="leadsBody"></tbody>
+          </table>
+        </div>
+        <div class="empty" id="emptyState"></div>
+      </div>
+
+      <p class="foot-note">Clicking a WhatsApp number opens a chat with that lead. Export CSV downloads all leads for Excel / Google Sheets.</p>
+    </main>
+  </div>
+
+  <script>
+    // Same public Supabase credentials as index.html (anon key is safe to expose).
+    // Reads are protected: only signed-in (authenticated) admin users can select rows.
+    const SUPABASE_URL = "https://lswytfwdwfabenddnwdx.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxzd3l0Zndkd2ZhYmVuZGRud2R4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDczMzAsImV4cCI6MjEwNjE4MzMzMH0.Ch28FJjUV93gdYr2qYFb62fa_7yajeGGH_2mZZVafqA";
+
+    const loginWrap = document.getElementById("loginWrap");
+    const dash = document.getElementById("dash");
+    const loginForm = document.getElementById("loginForm");
+    const loginError = document.getElementById("loginError");
+    const loginBtn = document.getElementById("loginBtn");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const leadsBody = document.getElementById("leadsBody");
+    const emptyState = document.getElementById("emptyState");
+    const totalStat = document.getElementById("totalStat");
+    const todayStat = document.getElementById("todayStat");
+    const adminEmailLabel = document.getElementById("adminEmailLabel");
+
+    let accessToken = sessionStorage.getItem("ff_admin_token") || "";
+    let adminEmail = sessionStorage.getItem("ff_admin_email") || "";
+    let currentLeads = [];
+
+    function showDashboard(){
+      loginWrap.style.display = "none";
+      dash.style.display = "block";
+      adminEmailLabel.textContent = adminEmail;
+      loadLeads();
+    }
+
+    function showLogin(){
+      dash.style.display = "none";
+      loginWrap.style.display = "grid";
+      sessionStorage.removeItem("ff_admin_token");
+      sessionStorage.removeItem("ff_admin_email");
+      accessToken = "";
+      adminEmail = "";
+      passwordInput.value = "";
+    }
+
+    // ---- Sign in via Supabase Auth (email + password) ----
+    loginForm.addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      loginError.style.display = "none";
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Signing in...";
+
+      try{
+        const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+          method: "POST",
+          headers: { "apikey": SUPABASE_ANON_KEY, "Content-Type": "application/json" },
+          body: JSON.stringify({ email: emailInput.value.trim(), password: passwordInput.value })
+        });
+        const data = await res.json();
+        if(!res.ok){
+          throw new Error(data.error_description || data.msg || "Invalid email or password.");
+        }
+        accessToken = data.access_token;
+        adminEmail = (data.user && data.user.email) || emailInput.value.trim();
+        sessionStorage.setItem("ff_admin_token", accessToken);
+        sessionStorage.setItem("ff_admin_email", adminEmail);
+        passwordInput.value = "";
+        showDashboard();
+      }catch(err){
+        loginError.textContent = err.message || "Invalid email or password.";
+        loginError.style.display = "block";
+      }finally{
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Sign In";
+      }
+    });
+
+    // ---- Fetch leads (only the authenticated admin can read them) ----
+    async function loadLeads(){
+      leadsBody.innerHTML = `<tr class="loading-row"><td colspan="4">Loading leads…</td></tr>`;
+      emptyState.style.display = "none";
+      totalStat.textContent = "—";
+      todayStat.textContent = "—";
+
+      try{
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/leads?select=name,phone,created_at&order=created_at.desc`, {
+          headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${accessToken}` }
+        });
+
+        if(res.status === 401){
+          loginError.textContent = "Your session expired. Please sign in again.";
+          loginError.style.display = "block";
+          showLogin();
+          return;
+        }
+        if(!res.ok){
+          const detail = await res.json().catch(()=>({}));
+          throw new Error(detail.message || `Could not load leads (HTTP ${res.status}). Make sure the "Admins can view leads" policy from schema.sql is applied in Supabase.`);
+        }
+
+        const leads = await res.json();
+        currentLeads = leads;
+        renderLeads(leads);
+      }catch(err){
+        leadsBody.innerHTML = "";
+        emptyState.textContent = err.message || "Could not load leads right now.";
+        emptyState.style.display = "block";
+      }
+    }
+
+    function renderLeads(leads){
+      leadsBody.innerHTML = "";
+
+      if(!leads.length){
+        emptyState.textContent = "No leads yet. They will appear here as soon as visitors submit their details on the website.";
+        emptyState.style.display = "block";
+        totalStat.textContent = "0";
+        todayStat.textContent = "0";
+        return;
+      }
+
+      const today = new Date().toDateString();
+      let todayCount = 0;
+
+      leads.forEach((lead, i)=>{
+        const d = new Date(lead.created_at);
+        if(d.toDateString() === today) todayCount++;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="idx">${i + 1}</td>
+          <td class="lead-name">${escapeHtml(lead.name)}</td>
+          <td><a class="wa" href="https://wa.me/91${encodeURIComponent(lead.phone)}" target="_blank" rel="noopener">+91 ${escapeHtml(lead.phone.slice(0,5))} ${escapeHtml(lead.phone.slice(5))}</a></td>
+          <td class="when">${d.toLocaleString("en-IN", { day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" })}</td>`;
+        leadsBody.appendChild(tr);
+      });
+
+      totalStat.textContent = String(leads.length);
+      todayStat.textContent = String(todayCount);
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    }
+
+    // ---- Refresh / export / logout ----
+    document.getElementById("refreshBtn").addEventListener("click", loadLeads);
+
+    document.getElementById("exportBtn").addEventListener("click", ()=>{
+      if(!currentLeads.length){
+        alert("No leads to export yet.");
+        return;
+      }
+      const rows = [["Name", "WhatsApp Number", "Received"]];
+      currentLeads.forEach(l => rows.push([l.name, `+91${l.phone}`, l.created_at]));
+      const csv = "\uFEFF" + rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `famous-foods-leads-${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", showLogin);
+
+    // Stay signed in while the browser tab/session is open
+    if(accessToken) showDashboard();
+  </script>
+</body>
+</html>

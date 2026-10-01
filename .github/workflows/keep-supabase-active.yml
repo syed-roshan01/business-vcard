@@ -1,0 +1,33 @@
+name: Keep Supabase Active
+
+# Supabase free-tier projects pause after 7 days of inactivity.
+# This workflow pings the project's REST API twice a week (Mon + Thu, 06:00 UTC),
+# so the project always registers activity and never pauses.
+# You can also run it manually: repo → Actions → Keep Supabase Active → Run workflow.
+#
+# The anon key below is the PUBLIC key already used in index.html/admin.html —
+# it is safe to expose and can only do what RLS allows.
+
+on:
+  schedule:
+    - cron: "0 6 * * 1,4"
+  workflow_dispatch:
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        env:
+          SUPABASE_URL: https://lswytfwdwfabenddnwdx.supabase.co
+          SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxzd3l0Zndkd2ZhYmVuZGRud2R4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDczMzAsImV4cCI6MjEwNjE4MzMzMH0.Ch28FJjUV93gdYr2qYFb62fa_7yajeGGH_2mZZVafqA
+        run: |
+          echo "Pinging Supabase project at $(date -u '+%Y-%m-%d %H:%M UTC')"
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            "${SUPABASE_URL}/rest/v1/leads?select=id&limit=1")
+          echo "Supabase responded with HTTP $code"
+          if [ "$code" != "200" ]; then
+            echo "::warning::Unexpected status $code — the request still counts as project activity."
+          fi
